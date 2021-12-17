@@ -1,3 +1,5 @@
 # Dijkstra
 
-Dijkstra algorithm project
+## Compte rendu
+
+Ceci est le compte rendu du projet Dijkstra
