@@ -1,9 +1,9 @@
-set terminal png size 600, 600
+set terminal png size 800, 600
 set title "My Implementation of Dijkstra Time Usage"
-set xlabel 'Time in Milliseconds'
-set ylabel 'Number of Nodes'
+set xlabel 'Number of Nodes'
+set ylabel 'Time in Milliseconds'
 set output 'graphResultatMoi.png'
-set xrange [0:150]
+set yrange [0:35000]
 set xrange [0:11000]
 set key outside
 
