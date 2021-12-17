@@ -5,10 +5,11 @@ import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class Main {
     public static int degreMoyen = 5;
-    public static int nodeCount = 5000;
+    public static int nodeCount = 1000;
 
     protected static String styleSheet =
             "node {" +
@@ -36,48 +37,42 @@ public class Main {
         Generator gen = new RandomGenerator(degreMoyen);
         gen.addSink(graph);
         gen.begin();
-        for(int i = 0; i < nodeCount; i++) {
+        for (int i = 0; i < nodeCount; i++) {
             gen.nextEvents();
         }
         gen.end();
         Random rand = new Random(20);
-        for(int i = 0; i < graph.getEdgeCount(); i++) {
+        for (int i = 0; i < graph.getEdgeCount(); i++) {
             int min = 1;
             int max = 10;
             int r = rand.nextInt(max - min + 1) + min;
             graph.getEdge(i).setAttribute("p", r);
-            graph.getEdge(i).setAttribute("ui.label", "E"+r);
+            graph.getEdge(i).setAttribute("ui.label", "E" + r);
         }
-        for(int i = 0; i < graph.getNodeCount(); i++) {
-            graph.getNode(i).setAttribute("ui.label", "N"+i);
+        for (int i = 0; i < graph.getNodeCount(); i++) {
+            graph.getNode(i).setAttribute("ui.label", "N" + i);
         }
         /* FIN GENERATION DU GRAPH ALEATOIRE */
         /* CALCUL DU CHEMIN LE PLUS COURT A PARTIR DU NOEUD 0 */
+        long startTimePerso = System.nanoTime();
         Dijkstra comp = new Dijkstra();
         comp.init(graph);
         comp.setSource(graph.getNode(0));
         comp.compute();
+        long estimatedTimePerso = System.nanoTime() - startTimePerso;
         /* FIN DU CALCUL DE MON DIJKSTRA */
+        long startTimeGraphStream = System.nanoTime();
         org.graphstream.algorithm.Dijkstra d = new org.graphstream.algorithm.Dijkstra(org.graphstream.algorithm.Dijkstra.Element.EDGE, null, "p");
         d.init(graph);
         d.setSource(graph.getNode(0));
         d.compute();
+        long estimatedTimeGraphStream = System.nanoTime() - startTimeGraphStream;
         /* FIN DU CALCUL DU DIJKSTRA DE GRAPHSTREAM */
-        System.out.println("résultat Dijkstra fait main : ");
 
-        for(int i = 0; i < graph.getNodeCount(); i++) {
-            System.out.println(comp.getPath(graph.getNode(i)).toString() + " pour aller ver " + graph.getNode(i).getAttribute("ui.label") + " depuis N0 de poids " + comp.getPathLength(graph.getNode(i)));
-        }
-        System.out.println("résultat Dijkstra Graphstream : ");
-        for(int i = 0; i < graph.getNodeCount(); i++) {
-            System.out.println(d.getPath(graph.getNode(i)).toString() + " pour aller ver " + graph.getNode(i).getAttribute("ui.label") + " depuis N0 de poids " + d.getPathLength(graph.getNode(i)));
-        }
-        for(int i = 0; i < graph.getNodeCount(); i++) {
-            Node n = graph.getNode(i);
-            if(!d.getPath(n).equals(comp.getPath(n)) && d.getPathLength(n) != comp.getPathLength(n)) {
-                System.out.println("Algorithme dysfonctionnel ou noeud isolé : " + d.getPath(graph.getNode(i)).toString() + " != " +  comp.getPath(graph.getNode(i)).toString() + " pour le noeud " + n.getAttribute("ui.label"));
-            }
-        }
-        graph.display();
+        System.out.println("\nComparatif des temps d'exécutions pour " + nodeCount + " noeuds de degré " + degreMoyen + " : ");
+        System.out.println("mon implémentation : " + TimeUnit.MILLISECONDS.convert(estimatedTimePerso, TimeUnit.NANOSECONDS) + " milliseconds");
+        System.out.println("implémentation graphStream : " + TimeUnit.MILLISECONDS.convert(estimatedTimeGraphStream, TimeUnit.NANOSECONDS) + " milliseconds");
+        //System.out.println(nodeCount + " " + degreMoyen + " " + TimeUnit.MILLISECONDS.convert(estimatedTimePerso, TimeUnit.NANOSECONDS) + " " + TimeUnit.MILLISECONDS.convert(estimatedTimeGraphStream, TimeUnit.NANOSECONDS));
+        //graph.display();
     }
 }
