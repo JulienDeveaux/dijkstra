@@ -72,7 +72,6 @@ public class Main {
         System.out.println("\nComparatif des temps d'exécutions pour " + nodeCount + " noeuds de degré " + degreMoyen + " : ");
         System.out.println("mon implémentation : " + TimeUnit.MILLISECONDS.convert(estimatedTimePerso, TimeUnit.NANOSECONDS) + " milliseconds");
         System.out.println("implémentation graphStream : " + TimeUnit.MILLISECONDS.convert(estimatedTimeGraphStream, TimeUnit.NANOSECONDS) + " milliseconds");
-        //System.out.println(nodeCount + " " + degreMoyen + " " + TimeUnit.MILLISECONDS.convert(estimatedTimePerso, TimeUnit.NANOSECONDS) + " " + TimeUnit.MILLISECONDS.convert(estimatedTimeGraphStream, TimeUnit.NANOSECONDS));
         //graph.display();
     }
 }
