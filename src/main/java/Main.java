@@ -41,16 +41,17 @@ public class Main {
             gen.nextEvents();
         }
         gen.end();
+
         Random rand = new Random(20);
         for (int i = 0; i < graph.getEdgeCount(); i++) {
             int min = 1;
             int max = 10;
             int r = rand.nextInt(max - min + 1) + min;
-            graph.getEdge(i).setAttribute("p", r);
-            graph.getEdge(i).setAttribute("ui.label", "E" + r);
+            graph.getEdge(i).setAttribute("p", r);                  // Ajout de poids aléatoires positifs au liens
+            graph.getEdge(i).setAttribute("ui.label", "E" + r);     // E pour edge
         }
         for (int i = 0; i < graph.getNodeCount(); i++) {
-            graph.getNode(i).setAttribute("ui.label", "N" + i);
+            graph.getNode(i).setAttribute("ui.label", "N" + i);     // N pour node
         }
         /* FIN GENERATION DU GRAPH ALEATOIRE */
         /* CALCUL DU CHEMIN LE PLUS COURT A PARTIR DU NOEUD 0 */
